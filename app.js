@@ -1,28 +1,32 @@
-import express from 'express';
+import express, { json } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
-import employeesRouter from './router/employeeRouter';
 import mongoose from 'mongoose';
+import helmet from 'helmet';
+import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
 
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
-  .then(console.log('ndaryoshye'));
+  .then(console.log('ndaryoshye bwa 2'));
 
 const app = express();
-app.use(express.json());
+
+app.use(helmet());
+app.use(json());
 app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/employees', employeesRouter);
 
 app.use((req, res, next) => {
-  const error = new error('Not found');
+  const error = new Error('Not found ');
   error.status = 404;
   next(error);
 });
