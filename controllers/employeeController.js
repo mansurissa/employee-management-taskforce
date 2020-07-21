@@ -25,29 +25,33 @@ export const employeePost = async (req, res) => {
   }
 };
 
-export const employeeDelete = async (req, res) => {
-  try {
-  } catch (err) {
-    res.status(500).json({
-      message: 'User deleted successfully',
-      error: err,
-    });
-  }
-};
-
 export const employeesGet = async (req, res) => {
   try {
-    await sendEmail();
-    // const employees = await Employees.find();
+    const employees = await Employees.find();
+
     res.status(200).json({
       message: ' employees fetched',
-      employees: 'mail sent',
+      employees,
     });
   } catch (error) {
     console.log('Big Error: ', error);
     res.status(500).json({
       message: ' failed to fetch all employees',
       error,
+    });
+  }
+};
+
+export const employeeDelete = async (req, res) => {
+  try {
+    await Employees.findById(req.params._id).deleteOne();
+    res.status(201).json({
+      message: 'User deleted successfully',
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'failed to delete a user',
     });
   }
 };
