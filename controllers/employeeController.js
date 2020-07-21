@@ -56,11 +56,17 @@ export const employeeDelete = async (req, res) => {
   }
 };
 
-// export const employeesGet = (req, res) => {
-//   Employees.find()
-//     .exec()
-//     .then(res.json('i am getting them'))
-//     .catch((err) => {
-//       res.json("i'm not getting them", err);
-//     });
-// };
+export const employeeUpdate = async (req, res) => {
+  try {
+    await Employees.findById(req.params._id).updateOne({ ...req.body });
+    res.status(201).json({
+      message: 'user info updated ',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'update failed',
+      error,
+    });
+  }
+};
