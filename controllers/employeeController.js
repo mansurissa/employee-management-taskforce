@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Employees from '../models/employeesModel';
+import sendEmail from '../helpers/mail';
 
 export const employeePost = async (req, res) => {
   try {
@@ -10,16 +11,16 @@ export const employeePost = async (req, res) => {
       status: req.body.status,
       position: req.body.position,
       birth: req.body.birth,
-      nId: req.body.nId
+      nId: req.body.nId,
     });
     res.status(201).json({
       message: ' user created successfully',
-      employee
+      employee,
     });
   } catch (err) {
     console.log('failed to write employee', err);
     res.status(500).json({
-      error: err
+      error: err,
     });
   }
 };
@@ -29,23 +30,24 @@ export const employeeDelete = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       message: 'User deleted successfully',
-      error: err
+      error: err,
     });
   }
 };
 
 export const employeesGet = async (req, res) => {
   try {
-    const employees = await Employees.find();
+    await sendEmail();
+    // const employees = await Employees.find();
     res.status(200).json({
       message: ' employees fetched',
-      employees
+      employees: 'mail sent',
     });
   } catch (error) {
     console.log('Big Error: ', error);
     res.status(500).json({
       message: ' failed to fetch all employees',
-      error
+      error,
     });
   }
 };
