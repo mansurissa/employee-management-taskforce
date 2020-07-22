@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Employees from '../models/employeesModel';
+import sendEmail from '../helpers/mail';
 
 export const employeePost = async (req, res) => {
   try {
@@ -10,26 +11,16 @@ export const employeePost = async (req, res) => {
       status: req.body.status,
       position: req.body.position,
       birth: req.body.birth,
-      nId: req.body.nId
+      nId: req.body.nId,
     });
     res.status(201).json({
       message: ' user created successfully',
-      employee
+      employee,
     });
   } catch (err) {
     console.log('failed to write employee', err);
     res.status(500).json({
-      error: err
-    });
-  }
-};
-
-export const employeeDelete = async (req, res) => {
-  try {
-  } catch (err) {
-    res.status(500).json({
-      message: 'User deleted successfully',
-      error: err
+      error: err,
     });
   }
 };
@@ -37,24 +28,61 @@ export const employeeDelete = async (req, res) => {
 export const employeesGet = async (req, res) => {
   try {
     const employees = await Employees.find();
+
     res.status(200).json({
       message: ' employees fetched',
-      employees
+      employees,
     });
   } catch (error) {
     console.log('Big Error: ', error);
     res.status(500).json({
       message: ' failed to fetch all employees',
-      error
+      error,
     });
   }
 };
 
-// export const employeesGet = (req, res) => {
-//   Employees.find()
-//     .exec()
-//     .then(res.json('i am getting them'))
-//     .catch((err) => {
-//       res.json("i'm not getting them", err);
-//     });
-// };
+export const employeeDelete = async (req, res) => {
+  try {
+    await Employees.findById(req.params._id).deleteOne();
+    res.status(201).json({
+      message: 'User deleted successfully',
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'failed to delete a user',
+    });
+  }
+};
+
+export const employeeUpdate = async (req, res) => {
+  try {
+    await Employees.findById(req.params._id).update({ ...req.body });
+    res.status(201).json({
+      message: 'user info updated ',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'update failed',
+      error,
+    });
+  }
+};
+
+export const employeeActivate = async (req, res) => {
+  const id = req.params._id;
+  try {
+    await Employees.findOneAndUpdate({ _id: id }, { status: req.body.status });
+    res.status(200).json({
+      message: 'activated successfully',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'activation failed',
+      error,
+    });
+  }
+};
