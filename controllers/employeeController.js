@@ -58,7 +58,7 @@ export const employeeDelete = async (req, res) => {
 
 export const employeeUpdate = async (req, res) => {
   try {
-    await Employees.findById(req.params._id).updateOne({ ...req.body });
+    await Employees.findById(req.params._id).update({ ...req.body });
     res.status(201).json({
       message: 'user info updated ',
     });
@@ -66,6 +66,22 @@ export const employeeUpdate = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: 'update failed',
+      error,
+    });
+  }
+};
+
+export const employeeActivate = async (req, res) => {
+  const id = req.params._id;
+  try {
+    await Employees.findOneAndUpdate({ _id: id }, { status: req.body.status });
+    res.status(200).json({
+      message: 'activated successfully',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'activation failed',
       error,
     });
   }
