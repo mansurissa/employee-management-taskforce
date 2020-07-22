@@ -50,11 +50,19 @@ export const employeesGet = async (req, res) => {
   }
 };
 
-// export const employeesGet = (req, res) => {
-//   Employees.find()
-//     .exec()
-//     .then(res.json('i am getting them'))
-//     .catch((err) => {
-//       res.json("i'm not getting them", err);
-//     });
-// };
+export const employeeSuspend = async (req, res) => {
+  try {
+    await Employees.findOneAndUpdate(
+      { _id: req.params._id },
+      { suspended: true }
+    );
+    res.status(201).json({
+      message: 'suspended successfully'
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: ' suspending an employee failed'
+    });
+  }
+};
