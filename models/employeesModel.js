@@ -10,11 +10,10 @@ const employeesSchema = mongoose.Schema({
   },
   birth: { type: String, required: true },
   nId: { type: Number, required: true, unique: true },
-  status: { type: String, required: true },
+  status: { type: String, default: 'activated' },
   position: { type: String, required: true },
-
+  suspended: { type: Boolean, default: false },
   phone: { type: Number, required: true, unique: true },
-
 });
 
 export default mongoose.model('Employees', employeesSchema);
