@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Employees from '../models/employeesModel';
 import sendEmail from '../helpers/mail';
 

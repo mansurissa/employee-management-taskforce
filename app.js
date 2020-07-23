@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import helmet from 'helmet';
+import managersRouter from './router/managersRouter';
 import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/employees', employeesRouter);
+app.use('/signup', managersRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Not found ');
