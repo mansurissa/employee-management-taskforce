@@ -1,13 +1,12 @@
 import { config } from 'dotenv';
 import nodemailer from 'nodemailer';
-import { compile } from 'morgan';
 
 config();
 const { EMAIL, PASS } = process.env;
 
 const sendEmail = async () => {
   try {
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
       secure: false, // true for 465, false for other ports
@@ -18,7 +17,7 @@ const sendEmail = async () => {
     });
 
     // send mail with defined transport object
-    let info = await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: '"Fred Foo 👻" <foo@example.com>', // sender address
       to: 'wqz85747@eoopy.com', // list of receivers
       subject: 'Hello ✔', // Subject line

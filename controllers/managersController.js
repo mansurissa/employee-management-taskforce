@@ -1,6 +1,6 @@
 import Managers from '../models/loginModel';
 
-export const managersSignup = async (req, res) => {
+const managersSignup = async (req, res) => {
   const { email, password } = req.body;
   try {
     const manager = await Managers.create({
@@ -20,3 +20,4 @@ export const managersSignup = async (req, res) => {
     });
   }
 };
+export default managersSignup;

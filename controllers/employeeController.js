@@ -1,5 +1,5 @@
 import Employees from '../models/employeesModel';
-import sendEmail from '../helpers/mail';
+// import sendEmail from '../helpers/mail';
 
 export const employeePost = async (req, res) => {
   try {
