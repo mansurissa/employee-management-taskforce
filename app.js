@@ -12,7 +12,7 @@ mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
   })
   .then(console.log('ndaryoshye bwa 2'));
 
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res) => {
   res.json({
-    error
+    error,
   });
 });
 
