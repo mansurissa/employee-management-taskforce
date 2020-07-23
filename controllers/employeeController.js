@@ -86,3 +86,26 @@ export const employeeActivate = async (req, res) => {
     });
   }
 };
+
+export const employeeSuspend = async (req, res) => {
+  try {
+    await Employees.findOneAndUpdate(
+      { _id: req.params._id },
+      { suspended: req.body.suspended }
+    );
+    if (req.body.suspended === true) {
+      res.status(201).json({
+        message: ' employee suspended',
+      });
+    } else if (req.body.suspended === false) {
+      res.status(201).json({
+        message: ' employee is back',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
