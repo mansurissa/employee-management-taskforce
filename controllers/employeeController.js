@@ -71,22 +71,18 @@ export const employeeUpdate = async (req, res) => {
   }
 };
 
-
 export const employeeActivate = async (req, res) => {
   const id = req.params._id;
   try {
     await Employees.findOneAndUpdate({ _id: id }, { status: req.body.status });
     res.status(200).json({
       message: 'activated successfully',
-
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-
       message: 'activation failed',
       error,
-
     });
   }
 };
