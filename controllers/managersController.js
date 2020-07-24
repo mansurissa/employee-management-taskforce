@@ -1,16 +1,28 @@
-import Managers from '../models/loginModel';
+import bcrypt from 'bcrypt';
+// import { json } from 'express';
+import Managers from '../models/managersModel';
 
-const managersSignup = async (req, res) => {
+export const managersSignup = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const manager = await Managers.create({
-      email,
-      password,
-    });
-    res.status(201).json({
-      success: true,
-      message: ' manager created',
-      manager,
+    await bcrypt.hash(password, 10, (err, hash) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          message: 'auth failed',
+        });
+      } else {
+        console.log(hash);
+        const manager = Managers.create({
+          email,
+          password: hash,
+        });
+        res.status(201).json({
+          success: true,
+          message: ' manager created',
+          manager,
+        });
+      }
     });
   } catch (error) {
     res.status(201).json({
@@ -20,4 +32,11 @@ const managersSignup = async (req, res) => {
     });
   }
 };
-export default managersSignup;
+
+export const login = async (req, res) => {
+  try {
+    await Managers;
+  } catch (error) {
+    console.log(error);
+  }
+};

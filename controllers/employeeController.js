@@ -108,3 +108,14 @@ export const employeeSuspend = async (req, res) => {
     });
   }
 };
+
+export const employeeSearch = async (req, res) => {
+  try {
+    await Employees.find();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
