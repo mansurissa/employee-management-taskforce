@@ -15,5 +15,10 @@ const employeesSchema = mongoose.Schema({
   suspended: { type: Boolean, default: false },
   phone: { type: Number, required: true, unique: true },
 });
-
+employeesSchema.index({
+  name: 'text',
+  position: 'text',
+  phone: 'number',
+  email: 'text',
+});
 export default mongoose.model('Employees', employeesSchema);
