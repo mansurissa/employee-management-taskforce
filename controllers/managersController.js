@@ -5,24 +5,26 @@ import Managers from '../models/managersModel';
 export const managersSignup = async (req, res) => {
   const { email, password } = req.body;
   try {
-    await bcrypt.hash(password, 10, (err, hash) => {
+    await bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
         console.log(err);
         res.status(500).json({
           message: 'auth failed',
         });
-      } else {
-        console.log(hash);
-        const manager = Managers.create({
-          email,
-          password: hash,
-        });
-        res.status(201).json({
-          success: true,
-          message: ' manager created',
-          manager,
-        });
       }
+      const data = await Managers.create({
+        name,
+        email,
+        password: hash,
+        dateOfBirth,
+        phone,
+        nId,
+      });
+      res.status(201).json({
+        success: true,
+        message: ' manager created',
+        manager: data,
+      });
     });
   } catch (error) {
     res.status(201).json({

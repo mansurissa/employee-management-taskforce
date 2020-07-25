@@ -11,6 +11,7 @@ export const employeePost = async (req, res) => {
       position: req.body.position,
       birth: req.body.birth,
       nId: req.body.nId,
+      image: req.image,
     });
     res.status(201).json({
       message: ' user created successfully',

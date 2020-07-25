@@ -14,6 +14,7 @@ const employeesSchema = mongoose.Schema({
   position: { type: String, required: true },
   suspended: { type: Boolean, default: false },
   phone: { type: Number, required: true, unique: true },
+  image: { type: String },
 });
 employeesSchema.index({
   name: 'text',

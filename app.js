@@ -3,21 +3,25 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import fileUpload from 'express-fileupload';
 import helmet from 'helmet';
 import managersRouter from './router/managersRouter';
 import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
 
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then(console.log('ndaryoshye bwa 2'));
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 
 const app = express();
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  })
+);
 
 app.use(helmet());
 app.use(json());
