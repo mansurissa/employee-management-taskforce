@@ -120,7 +120,11 @@ export const employeeSearch = async (req, res) => {
       [keys]: { $regex: values },
     });
 
-    res.status(200).json(result);
+    res.status(200).json({
+      success: true,
+      found: `${result.length} matches with '${values}'`,
+      result,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

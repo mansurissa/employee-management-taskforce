@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
-// import { json } from 'express';
+import jwt from 'jsonwebtoken';
 import Managers from '../models/managersModel';
 
 export const managersSignup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, dateOfBirth, phone, nId, name } = req.body;
   try {
     await bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
@@ -38,7 +38,9 @@ export const managersGet = async (req, res) => {
   try {
     const manager = await Managers.find();
     res.status(200).json({
-      message: 'success',
+      success: true,
+      got: `${manager.length} regestered managers`,
+      message: 'successfully get managers',
       manager,
     });
   } catch (err) {
@@ -48,11 +50,10 @@ export const managersGet = async (req, res) => {
     });
   }
 };
-
 export const login = async (req, res) => {
   try {
     const data = await Managers.find({ email: req.body.email });
-    if (data.length > 1) {
+    if (data.length > 0) {
       bcrypt.compare(req.body.password, data[0].password, (err, result) => {
         console.log(result);
         if (err) {
@@ -62,17 +63,32 @@ export const login = async (req, res) => {
           });
         }
         if (result) {
+          const token = jwt.sign(
+            {
+              email: data[0].email,
+              managerId: data[0]._id,
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: '1h',
+            }
+          );
+          console.log(token);
           res.status(200).json({
-            message: 'successfully loged in',
+            success: true,
+            message: 'successfully loged in and authorized',
+            data,
+            token,
           });
         }
       });
+    } else {
+      res.status(404).json('not found in managers');
     }
   } catch (error) {
     console.log(error);
   }
 };
-
 export const managerDelete = async (req, res) => {
   const { id } = req.params;
   try {
