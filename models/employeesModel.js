@@ -16,10 +16,5 @@ const employeesSchema = mongoose.Schema({
   phone: { type: Number, required: true, unique: true },
   image: { type: String },
 });
-employeesSchema.index({
-  name: 'text',
-  position: 'text',
-  phone: 'number',
-  email: 'text',
-});
+
 export default mongoose.model('Employees', employeesSchema);
