@@ -46,7 +46,6 @@ export const managersGet = async (req, res) => {
     });
   }
 };
-
 export const login = async (req, res) => {
   try {
     const data = await Managers.find({ email: req.body.email });
@@ -70,7 +69,6 @@ export const login = async (req, res) => {
     console.log(error);
   }
 };
-
 export const managerDelete = async (req, res) => {
   const { id } = req.params;
   try {

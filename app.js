@@ -40,4 +40,4 @@ app.use((error, req, res) => {
 });
 
 const port = process.env.PORT;
-app.listen(port, console.log(`listening on ${port}`));
+app.listen(port || 4002, console.log(`listening on ${port}`));
