@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-// import { json } from 'express';
+import jwt from 'jsonwebtoken';
 import Managers from '../models/managersModel';
 
 export const managersSignup = async (req, res) => {
@@ -64,10 +64,22 @@ export const login = async (req, res) => {
           });
         }
         if (result) {
+          const token = jwt.sign(
+            {
+              email: data[0].email,
+              managerId: data[0]._id,
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: '1h',
+            }
+          );
+          console.log(token);
           res.status(200).json({
             success: true,
-            message: 'successfully loged in',
+            message: 'successfully loged in and authorized',
             data,
+            token,
           });
         }
       });

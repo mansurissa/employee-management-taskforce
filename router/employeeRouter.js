@@ -1,4 +1,5 @@
 import express from 'express';
+import checkAuth from '../middlewares/checkAuth';
 import {
   employeePost,
   employeesGet,
@@ -11,10 +12,13 @@ import {
 
 const employeesRouter = express.Router();
 
-employeesRouter.route('/').post(employeePost).get(employeesGet);
-employeesRouter.route('/:_id').delete(employeeDelete).put(employeeUpdate);
-employeesRouter.route('/:_id/activate').put(employeeActivate);
-employeesRouter.route('/:_id/suspend').put(employeeSuspend);
-employeesRouter.route('/search').post(employeeSearch);
+employeesRouter.route('/').post(checkAuth, employeePost).get(employeesGet);
+employeesRouter
+  .route('/:_id')
+  .delete(checkAuth, employeeDelete)
+  .put(checkAuth, employeeUpdate);
+employeesRouter.route('/:_id/activate').put(checkAuth, employeeActivate);
+employeesRouter.route('/:_id/suspend').put(checkAuth, employeeSuspend);
+employeesRouter.route('/search').post(checkAuth, employeeSearch);
 
 export default employeesRouter;
