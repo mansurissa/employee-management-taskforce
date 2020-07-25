@@ -13,6 +13,7 @@ const loginSchema = mongoose.Schema({
   password: { type: String, required: true },
   position: { type: String, default: 'manager', required: true },
   dateOfBirth: { type: String, required: true },
+  status: { type: String, required: true, default: 'active' },
 });
 
 export default mongoose.model('Managers', loginSchema);

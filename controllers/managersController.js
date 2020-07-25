@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import Managers from '../models/managersModel';
 
 export const managersSignup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, dateOfBirth, phone, nId, name } = req.body;
   try {
     await bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
@@ -11,18 +11,21 @@ export const managersSignup = async (req, res) => {
         res.status(500).json({
           message: 'auth failed',
         });
-      } else {
-        console.log(hash);
-        const manager = Managers.create({
-          email,
-          password: hash,
-        });
+      }
+      Managers.create({
+        name,
+        email,
+        password: hash,
+        dateOfBirth,
+        phone,
+        nId,
+      }).then((data) => {
         res.status(201).json({
           success: true,
           message: ' manager created',
-          manager,
+          manager: data,
         });
-      }
+      });
     });
   } catch (error) {
     res.status(201).json({
