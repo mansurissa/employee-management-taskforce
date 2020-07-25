@@ -9,13 +9,12 @@ import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
 
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then(console.log('ndaryoshye bwa 2'));
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
+// .then(console.log('Database connected'));
 
 const app = express();
 

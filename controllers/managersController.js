@@ -36,7 +36,9 @@ export const managersGet = async (req, res) => {
   try {
     const manager = await Managers.find();
     res.status(200).json({
-      message: 'success',
+      success: true,
+      got: `${manager.length} regestered managers`,
+      message: 'successfully get managers',
       manager,
     });
   } catch (err) {
@@ -49,7 +51,7 @@ export const managersGet = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const data = await Managers.find({ email: req.body.email });
-    if (data.length > 1) {
+    if (data.length > 0) {
       bcrypt.compare(req.body.password, data[0].password, (err, result) => {
         console.log(result);
         if (err) {
@@ -60,10 +62,14 @@ export const login = async (req, res) => {
         }
         if (result) {
           res.status(200).json({
+            success: true,
             message: 'successfully loged in',
+            data,
           });
         }
       });
+    } else {
+      res.status(404).json('not found in managers');
     }
   } catch (error) {
     console.log(error);
