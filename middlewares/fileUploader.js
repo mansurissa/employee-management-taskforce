@@ -1,6 +1,7 @@
 import path from 'path';
 
 const fileUpload = (req, res, next) => {
+  if (!req.files) return next();
   const managerImage = req.files.image;
   const imageUrl = path.join(
     __dirname,
@@ -14,6 +15,6 @@ const fileUpload = (req, res, next) => {
     }
   });
   req.image = imageUrl;
-  next();
+  return next();
 };
 export default fileUpload;

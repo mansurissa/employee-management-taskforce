@@ -1,6 +1,6 @@
 import express from 'express';
 import fileUploader from '../middlewares/fileUploader';
-import checkAuth from '../middlewares/checkAuth';
+import auth from '../middlewares/checkAuth';
 
 import {
   employeePost,
@@ -16,14 +16,14 @@ const employeesRouter = express.Router();
 
 employeesRouter
   .route('/')
-  .post(checkAuth, fileUploader, employeePost)
+  .post(auth, fileUploader, employeePost)
   .get(employeesGet);
 employeesRouter
   .route('/:_id')
-  .delete(checkAuth, employeeDelete)
-  .put(checkAuth, employeeUpdate);
-employeesRouter.route('/:_id/activate').put(checkAuth, employeeActivate);
-employeesRouter.route('/:_id/suspend').put(checkAuth, employeeSuspend);
-employeesRouter.route('/search').post(checkAuth, employeeSearch);
+  .delete(auth, employeeDelete)
+  .put(auth, employeeUpdate);
+employeesRouter.route('/:_id/activate').put(auth, employeeActivate);
+employeesRouter.route('/:_id/suspend').put(auth, employeeSuspend);
+employeesRouter.route('/search').post(auth, employeeSearch);
 
 export default employeesRouter;
