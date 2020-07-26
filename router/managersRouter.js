@@ -1,8 +1,17 @@
 import express from 'express';
-import managersSignup from '../controllers/managersController';
+import checkAuth from '../middlewares/checkAuth';
+import {
+  managersSignup,
+  login,
+  managerDelete,
+  managersGet,
+} from '../controllers/managersController';
 
 const managersRouter = express.Router();
 
-managersRouter.route('/').post(managersSignup);
+managersRouter.route('/signup').post(managersSignup);
+managersRouter.route('/signin').post(login);
+managersRouter.route('/:id').delete(checkAuth, managerDelete);
+managersRouter.route('/').get(checkAuth, managersGet);
 
 export default managersRouter;

@@ -1,4 +1,7 @@
 import express from 'express';
+import fileUploader from '../middlewares/fileUploader';
+import auth from '../middlewares/checkAuth';
+
 import {
   employeePost,
   employeesGet,
@@ -6,13 +9,21 @@ import {
   employeeUpdate,
   employeeActivate,
   employeeSuspend,
+  employeeSearch,
 } from '../controllers/employeeController';
 
 const employeesRouter = express.Router();
 
-employeesRouter.route('/').post(employeePost).get(employeesGet);
-employeesRouter.route('/:_id').delete(employeeDelete).put(employeeUpdate);
-employeesRouter.route('/:_id/activate').put(employeeActivate);
-employeesRouter.route('/:_id/suspend').put(employeeSuspend);
+employeesRouter
+  .route('/')
+  .post(auth, fileUploader, employeePost)
+  .get(employeesGet);
+employeesRouter
+  .route('/:_id')
+  .delete(auth, employeeDelete)
+  .put(auth, employeeUpdate);
+employeesRouter.route('/:_id/activate').put(auth, employeeActivate);
+employeesRouter.route('/:_id/suspend').put(auth, employeeSuspend);
+employeesRouter.route('/search').post(auth, employeeSearch);
 
 export default employeesRouter;

@@ -11,6 +11,7 @@ export const employeePost = async (req, res) => {
       position: req.body.position,
       birth: req.body.birth,
       nId: req.body.nId,
+      // image: req.image,
     });
     res.status(201).json({
       message: ' user created successfully',
@@ -43,9 +44,11 @@ export const employeesGet = async (req, res) => {
 
 export const employeeDelete = async (req, res) => {
   try {
-    await Employees.findById(req.params._id).deleteOne();
+    const del = await Employees.findById(req.params._id).delete();
     res.status(201).json({
+      success: true,
       message: 'User deleted successfully',
+      data: del,
     });
   } catch (err) {
     console.log(err);
@@ -101,6 +104,27 @@ export const employeeSuspend = async (req, res) => {
         message: ' employee is back',
       });
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const employeeSearch = async (req, res) => {
+  try {
+    const [keys] = Object.keys(req.body);
+    const [values] = Object.values(req.body);
+    const result = await Employees.find({
+      [keys]: { $regex: values },
+    });
+
+    res.status(200).json({
+      success: true,
+      found: `${result.length} matches with '${values}'`,
+      result,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
