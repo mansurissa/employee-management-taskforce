@@ -1,20 +1,13 @@
-import path from 'path';
+import cloudinary from '../config/cloudnary';
 
-const fileUpload = (req, res, next) => {
+const fileUpload = async (req, res, next) => {
   if (!req.files) return next();
-  const managerImage = req.files.image;
-  const imageUrl = path.join(
-    __dirname,
-    '..',
-    '..',
-    `/uploads/${new Date().toISOString() + managerImage.name}`
+  const { tempFilePath } = req.files.image;
+  const { url } = await cloudinary.upload(
+    tempFilePath,
+    (_, results) => results
   );
-  managerImage.mv(imageUrl, (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  req.image = imageUrl;
+  req.image = url;
   return next();
 };
 export default fileUpload;

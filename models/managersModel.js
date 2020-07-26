@@ -14,6 +14,7 @@ const loginSchema = mongoose.Schema({
   position: { type: String, default: 'manager', required: true },
   dateOfBirth: { type: String, required: true },
   status: { type: String, required: true, default: 'active' },
+  image: { type: String },
 });
 
 export default mongoose.model('Managers', loginSchema);

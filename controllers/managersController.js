@@ -19,6 +19,7 @@ export const managersSignup = async (req, res) => {
         dateOfBirth,
         phone,
         nId,
+        image: req.image,
       });
       res.status(201).json({
         success: true,
