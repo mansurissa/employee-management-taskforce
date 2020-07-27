@@ -19,7 +19,8 @@ mongoose.connect(process.env.MONGO_URL, {
 const app = express();
 app.use(
   fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
+    limits: { fileSize: 2 * 1024 * 1024 },
+    useTempFiles: true,
   })
 );
 
