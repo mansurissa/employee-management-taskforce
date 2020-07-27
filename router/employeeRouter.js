@@ -10,7 +10,9 @@ import {
   employeeActivate,
   employeeSuspend,
   employeeSearch,
+  saveEmployees,
 } from '../controllers/employeeController';
+import { readExcel, uploadExcel } from '../helpers/excel';
 
 const employeesRouter = express.Router();
 
@@ -18,6 +20,7 @@ employeesRouter
   .route('/')
   .post(auth, fileUploader, employeePost)
   .get(employeesGet);
+employeesRouter.route('/many').post(uploadExcel, readExcel, saveEmployees);
 employeesRouter
   .route('/:_id')
   .delete(auth, employeeDelete)

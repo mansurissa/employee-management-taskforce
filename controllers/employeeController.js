@@ -14,8 +14,9 @@ export const employeePost = async (req, res) => {
       image: req.image,
     });
     res.status(201).json({
+      success: true,
       message: ' user created successfully',
-      employee,
+      data: employee,
     });
   } catch (err) {
     console.log('failed to write employee', err);
@@ -30,8 +31,12 @@ export const employeesGet = async (req, res) => {
     const employees = await Employees.find();
 
     res.status(200).json({
+      success: true,
       message: ' employees fetched',
-      employees,
+      data: {
+        count: employees.length,
+        employees,
+      },
     });
   } catch (error) {
     console.log('Big Error: ', error);
@@ -124,6 +129,35 @@ export const employeeSearch = async (req, res) => {
       success: true,
       found: `${result.length} matches with '${values}'`,
       result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const saveEmployees = async (req, res) => {
+  try {
+    const employee = req.employeeList;
+    employee.map((data) => {
+      const received = Employees.create({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        status: data.status,
+        position: data.position,
+        birth: data.birth,
+        nId: data.nId,
+        // image: req.image,
+      });
+      return received;
+    });
+    res.status(201).json({
+      success: true,
+      message: ' users created successfully',
+      data: employee,
     });
   } catch (error) {
     console.log(error);
