@@ -1,5 +1,5 @@
 import Employees from '../models/employeesModel';
-// import ErrorResponse from '../helpers/';
+import ErrorResponse from '../helpers/errorResponse';
 import sendEmail from '../helpers/mail';
 
 const yearsValidator = (birthday) => {
@@ -12,11 +12,11 @@ export const employeePost = async (req, res) => {
   try {
     const { name, email, phone, birth, nId } = req.body;
     if (!name || !email || !phone || !birth || !nId) {
-      // throw new ErrorResponse('some fields are not filled', 400);
+      throw new ErrorResponse('some fields are not filled', 400);
     }
 
     if (yearsValidator(req.birth) < 18) {
-      // throw new ErrorResponse('uzakura sha ndagukoje', 400);
+      throw new ErrorResponse('uzakura sha ndagukoje', 400);
     }
 
     const employee = await Employees.create({
@@ -29,7 +29,7 @@ export const employeePost = async (req, res) => {
       nId: req.body.nId,
       image: req.image,
     });
-    sendEmail();
+    sendEmail(`Comfirmation`);
     return res.status(201).json({
       success: true,
       message: ' user created successfully',

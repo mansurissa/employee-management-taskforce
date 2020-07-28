@@ -1,10 +1,25 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Managers from '../models/managersModel';
+import ErrorResponse from '../helpers/errorResponse';
+
+const yearsValidator = (birthday) => {
+  const year = birthday.split('/')[2];
+  const todayTime = new Date();
+  return todayTime.getFullYear() - parseInt(year, 10);
+};
 
 export const managersSignup = async (req, res) => {
   const { email, password, dateOfBirth, phone, nId, name } = req.body;
   try {
+    if (!name || !email || !phone || !dateOfBirth || !nId) {
+      throw new ErrorResponse('some fields are not filled', 400);
+    }
+
+    if (yearsValidator(req.birth) < 18) {
+      throw new ErrorResponse('uzakura sha kuba manager biravuna petit', 400);
+    }
+
     await bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
         console.log(err);
