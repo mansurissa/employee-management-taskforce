@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 config();
 const { EMAIL, PASS } = process.env;
 
-const sendEmail = async () => {
+const sendEmail = async (type) => {
   try {
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
@@ -15,17 +15,24 @@ const sendEmail = async () => {
         pass: PASS, // generated ethereal password
       },
     });
-
-    // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    const mail = {
+      from: '"Fred Foo 👻" <employeesManagement@example.com>', // sender address
       to: 'wqz85747@eoopy.com', // list of receivers
       subject: 'Hello ✔', // Subject line
-      text: 'Hello world?', // plain text body
-      html: '<b>Hello world?</b>', // html body
-    });
+    };
 
-    console.log('Message sent: %s', info.messageId);
+    switch (type) {
+      case 'comfirmation':
+        mail.html = '<b>Welcome to Nettrip</b>';
+        break;
+      case 'verfication':
+        mail.html = '<b>verify your email</b>';
+        break;
+      default:
+        mail.html = '<p>ntgo ari sawa</p>';
+    }
+
+    const info = await transporter.sendMail(mail);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   } catch (error) {
     console.log(error);
