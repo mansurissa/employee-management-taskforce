@@ -20,7 +20,9 @@ employeesRouter
   .route('/')
   .post(auth, fileUploader, employeePost)
   .get(employeesGet);
-employeesRouter.route('/many').post(uploadExcel, readExcel, saveEmployees);
+employeesRouter
+  .route('/many')
+  .post(auth, uploadExcel, readExcel, saveEmployees);
 employeesRouter
   .route('/:_id')
   .delete(auth, employeeDelete)
