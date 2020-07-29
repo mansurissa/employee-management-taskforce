@@ -1,6 +1,6 @@
 import Employees from '../models/employeesModel';
 import ErrorResponse from '../helpers/errorResponse';
-// import sendEmail from '../helpers/mail';
+import sendEmail from '../helpers/mail';
 
 const yearsValidator = (birthday) => {
   const year = birthday.split('/')[2];
@@ -29,6 +29,7 @@ export const employeePost = async (req, res) => {
       nId: req.body.nId,
       image: req.image,
     });
+    sendEmail(`Comfirmation`);
     return res.status(201).json({
       success: true,
       message: ' user created successfully',

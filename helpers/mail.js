@@ -1,31 +1,39 @@
+import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 import nodemailer from 'nodemailer';
 
 config();
-const { EMAIL, PASS } = process.env;
+const { EMAIL, PASS, JWT_KEY, PORT } = process.env;
 
-const sendEmail = async () => {
+const sendEmail = async (type, data = {}) => {
   try {
+    const token = jwt.sign(data, JWT_KEY, { expiresIn: '1h' });
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
-      secure: false, // true for 465, false for other ports
       auth: {
         user: EMAIL, // generated ethereal user
         pass: PASS, // generated ethereal password
       },
     });
+    const mail = {
+      from: '"From superManager" <employeesManagement@example.com>', // sender address
+      to: `${data.email}`, // list of receivers
+      subject: `${type}`, // Subject line
+    };
 
-    // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
-      to: 'wqz85747@eoopy.com', // list of receivers
-      subject: 'Hello ✔', // Subject line
-      text: 'Hello world?', // plain text body
-      html: '<b>Hello world?</b>', // html body
-    });
+    switch (type) {
+      case 'comfirmation':
+        mail.html = '<b>Welcome to Nettrip</b>';
+        break;
+      case 'verify':
+        mail.html = `<b>verify your email</b> <a href='http://localhost:${PORT}/managers/verify/${token}'>click here to verify</a>`;
+        break;
+      default:
+        mail.html = '<p>ntago ari sawa</p>';
+    }
 
-    console.log('Message sent: %s', info.messageId);
+    const info = await transporter.sendMail(mail);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   } catch (error) {
     console.log(error);
