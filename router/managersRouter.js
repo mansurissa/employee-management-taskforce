@@ -6,6 +6,7 @@ import {
   login,
   managerDelete,
   managersGet,
+  managerVerify,
 } from '../controllers/managersController';
 
 const managersRouter = express.Router();
@@ -14,5 +15,5 @@ managersRouter.route('/signup').post(fileUploader, managersSignup);
 managersRouter.route('/signin').post(login);
 managersRouter.route('/:id').delete(auth, managerDelete);
 managersRouter.route('/').get(auth, managersGet);
-
+managersRouter.route('/verify/:token').get(managerVerify);
 export default managersRouter;

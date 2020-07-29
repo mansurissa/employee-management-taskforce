@@ -18,7 +18,6 @@ const loginSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
-    match: /^[\w\d@.$#,%*\\)]{8,16}$/,
   },
   position: { type: String, default: 'manager', required: true },
   dateOfBirth: {
@@ -32,6 +31,7 @@ const loginSchema = mongoose.Schema({
     default: 'active',
     match: /^(in)?(active)$/,
   },
+  verified: { type: Boolean, default: false },
 });
 
 export default mongoose.model('Managers', loginSchema);

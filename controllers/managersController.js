@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Managers from '../models/managersModel';
 import ErrorResponse from '../helpers/errorResponse';
+import sendEmail from '../helpers/mail';
 
 const yearsValidator = (birthday) => {
   const year = birthday.split('/')[2];
@@ -16,7 +17,7 @@ export const managersSignup = async (req, res) => {
       throw new ErrorResponse('some fields are not filled', 400);
     }
 
-    if (yearsValidator(req.birth) < 18) {
+    if (yearsValidator(req.body.dateOfBirth) < 18) {
       throw new ErrorResponse('uzakura sha kuba manager biravuna petit', 400);
     }
 
@@ -36,13 +37,18 @@ export const managersSignup = async (req, res) => {
         nId,
         image: req.image,
       });
+      sendEmail('verify', {
+        email: data.email,
+        id: data._id,
+      });
       res.status(201).json({
         success: true,
-        message: ' manager created',
-        manager: data,
+        message: 'manager created',
+        manager: 'Check your email for verification link',
       });
     });
   } catch (error) {
+    console.log(error);
     res.status(201).json({
       success: false,
       message: ' manager was not created',
@@ -120,6 +126,20 @@ export const managerDelete = async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: 'failed to delete ',
+    });
+  }
+};
+export const managerVerify = (req, res) => {
+  try {
+    const { token } = req.params;
+    const verified = jwt.verify(token, process.env.JWT_KEY);
+    if (verified) {
+      Managers.findById(verified.id).update({ verified: true });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'verification failed ',
     });
   }
 };
