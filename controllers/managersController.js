@@ -136,6 +136,12 @@ export const managerVerify = (req, res) => {
     if (verified) {
       Managers.findById(verified.id).update({ verified: true });
     }
+    res.status(200).json({
+      success: true,
+      message: 'verified, now you are regestred as a manager',
+      data: {},
+    });
+    sendEmail('comfirmation', { email: verified.email });
   } catch (error) {
     console.log(error);
     res.status(500).json({
