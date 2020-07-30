@@ -29,6 +29,12 @@ const sendEmail = async (type, data = {}) => {
       case 'verify':
         mail.html = `<b>verify your email</b> <a href='http://localhost:${PORT}/managers/verify/${token}'>click here to verify</a>`;
         break;
+      case 'forgot':
+        mail.html = `<b>Please click this</b> <a href='http://localhost:${PORT}/managers/reset/${token}'>link </a>`;
+        break;
+      case 'reseted':
+        mail.html = '<b>you can now use your new password to login</b>';
+        break;
       default:
         mail.html = '<p>ntago ari sawa</p>';
     }
