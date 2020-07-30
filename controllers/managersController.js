@@ -10,15 +10,36 @@ const yearsValidator = (birthday) => {
   return todayTime.getFullYear() - parseInt(year, 10);
 };
 
+const badRes =
+  'password must be atleast 8 characters, one or more special charcter and one or more digits';
+
+const checkPwd = (pwd) => {
+  if (
+    pwd.length < 8 ||
+    pwd.search(/\d/) === -1 ||
+    pwd.length > 16 ||
+    pwd.search(/[^a-zA-Z0-9!@#$%^&*()_+]/) !== -1 ||
+    pwd.search(/[a-zA-Z]/) === -1 ||
+    pwd.search(/\d/) === -1
+  ) {
+    return badRes;
+  }
+  return 'ok';
+};
+
 export const managersSignup = async (req, res) => {
   const { email, password, dateOfBirth, phone, nId, name } = req.body;
+
   try {
-    if (!name || !email || !phone || !dateOfBirth || !nId) {
+    if (!name || !email || !phone || !dateOfBirth || !nId || !password) {
       throw new ErrorResponse('some fields are not filled', 400);
     }
 
-    if (yearsValidator(req.body.dateOfBirth) < 18) {
+    if (yearsValidator(dateOfBirth) < 18) {
       throw new ErrorResponse('uzakura sha kuba manager biravuna petit', 400);
+    }
+    if (checkPwd(password) !== 'ok') {
+      throw new ErrorResponse(badRes, 400);
     }
 
     await bcrypt.hash(password, 10, async (err, hash) => {
