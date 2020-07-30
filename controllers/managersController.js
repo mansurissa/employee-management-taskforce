@@ -170,3 +170,42 @@ export const managerVerify = (req, res) => {
     });
   }
 };
+
+export const forgotPwd = async (req, res) => {
+  const validEmail = await Managers.findOne({ email: req.body.email });
+  if (!validEmail) {
+    res.status(404).json({ message: 'please try again later', data: {} });
+  }
+  sendEmail('forgot', {
+    email: validEmail.email,
+    id: validEmail._id,
+  });
+  res.status(200).json({
+    success: true,
+    message: 'a password reset link was sent to your inbox please check!!',
+    data: {},
+  });
+};
+
+export const resetPwd = async (req, res) => {
+  if (checkPwd(req.body.password) !== 'ok') {
+    throw new ErrorResponse(badRes, 400);
+  }
+  try {
+    const { token } = req.params;
+    const { email } = jwt.verify(token, process.env.JWT_KEY);
+    const hash = await bcrypt.hash(req.body.password, 10);
+    const foundManager = await Managers.findOne({ email }).update({
+      password: hash,
+    });
+    console.log(foundManager);
+    sendEmail('reseted', { email });
+    res.status(201).json({
+      success: true,
+      message: 'updated password successfully',
+      data: foundManager,
+    });
+  } catch (error) {
+    res.status(400).json();
+  }
+};
