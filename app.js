@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import fileUpload from 'express-fileupload';
 import helmet from 'helmet';
+import managersRouter from './router/managersRouter';
 import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
@@ -15,9 +17,15 @@ mongoose
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
-  .then(console.log('ndaryoshye bwa 2'));
+  .then(console.log('connected to DB'));
 
 const app = express();
+app.use(
+  fileUpload({
+    limits: { fileSize: 2 * 1024 * 1024 },
+    useTempFiles: true,
+  })
+);
 
 app.use(helmet());
 app.use(json());
@@ -25,6 +33,7 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/employees', employeesRouter);
+app.use('/managers', managersRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Not found ');
@@ -39,4 +48,4 @@ app.use((error, req, res) => {
 });
 
 const port = process.env.PORT;
-app.listen(port, console.log(`listening on ${port}`));
+app.listen(port || 4002, console.log(`listening on ${port}`));
