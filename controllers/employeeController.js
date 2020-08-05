@@ -109,6 +109,7 @@ export const employeeActivate = async (req, res) => {
     res.status(500).json({
       message: 'activation failed',
       error,
+<<<<<<< HEAD
     });
   }
 };
@@ -182,6 +183,8 @@ export const saveEmployees = async (req, res) => {
     console.log(error);
     res.status(500).json({
       error,
+=======
+>>>>>>> master
     });
   }
 };

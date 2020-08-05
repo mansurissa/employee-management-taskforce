@@ -10,11 +10,14 @@ import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+const mongoDb = process.env.MONGO_URL;
+mongoose
+  .connect(mongoDb, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(console.log('connected to DB'));
 
 const app = express();
 app.use(
