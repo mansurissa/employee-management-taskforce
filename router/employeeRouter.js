@@ -1,4 +1,5 @@
 import express from 'express';
+// import fileUpload from 'express-fileupload';
 import fileUploader from '../middlewares/fileUploader';
 import auth from '../middlewares/checkAuth';
 
@@ -11,6 +12,7 @@ import {
   employeeSuspend,
   employeeSearch,
   saveEmployees,
+  employeeImage,
 } from '../controllers/employeeController';
 import { readExcel, uploadExcel } from '../helpers/excel';
 
@@ -30,5 +32,6 @@ employeesRouter
 employeesRouter.route('/:_id/activate').put(auth, employeeActivate);
 employeesRouter.route('/:_id/suspend').put(auth, employeeSuspend);
 employeesRouter.route('/search').post(auth, employeeSearch);
+employeesRouter.route('/image').post(auth, fileUploader, employeeImage);
 
 export default employeesRouter;

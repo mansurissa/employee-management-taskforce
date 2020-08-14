@@ -15,7 +15,7 @@ export const employeePost = async (req, res) => {
       throw new ErrorResponse('some fields are not filled', 400);
     }
 
-    if (yearsValidator(req.birth) < 18) {
+    if (yearsValidator(req.body.birth) < 18) {
       throw new ErrorResponse('uzakura sha ndagukoje', 400);
     }
 
@@ -27,9 +27,10 @@ export const employeePost = async (req, res) => {
       position: req.body.position,
       birth: req.body.birth,
       nId: req.body.nId,
-      image: req.image,
     });
-    sendEmail(`Comfirmation`);
+    sendEmail(`Comfirmation`, {
+      email,
+    });
     return res.status(201).json({
       success: true,
       message: ' user created successfully',
@@ -86,7 +87,7 @@ export const employeeUpdate = async (req, res) => {
   try {
     await Employees.findById(req.params._id).update({ ...req.body });
     res.status(201).json({
-      message: 'user info updated ',
+      message: 'Employee info updated ',
     });
   } catch (error) {
     console.log(error);
@@ -109,7 +110,6 @@ export const employeeActivate = async (req, res) => {
     res.status(500).json({
       message: 'activation failed',
       error,
-<<<<<<< HEAD
     });
   }
 };
@@ -183,8 +183,21 @@ export const saveEmployees = async (req, res) => {
     console.log(error);
     res.status(500).json({
       error,
-=======
->>>>>>> master
+    });
+  }
+};
+export const employeeImage = async (req, res) => {
+  try {
+    await Employees.findById(req.params._id).update({ image: req.image });
+    res.status(200).json({
+      success: true,
+      message: 'image added successfully',
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "employee's image not sent",
     });
   }
 };

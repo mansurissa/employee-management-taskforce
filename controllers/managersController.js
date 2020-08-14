@@ -116,7 +116,6 @@ export const login = async (req, res) => {
               expiresIn: '1h',
             }
           );
-          console.log(token);
           res.status(200).json({
             success: true,
             message: 'successfully loged in and authorized',
@@ -128,7 +127,7 @@ export const login = async (req, res) => {
         }
       });
     } else {
-      res.status(404).json('not found in managers');
+      res.status(404).json('not found in managers please try aggain');
     }
   } catch (error) {
     console.log(error);
@@ -157,6 +156,7 @@ export const managerVerify = (req, res) => {
     if (verified) {
       Managers.findById(verified.id).update({ verified: true });
     }
+
     res.status(200).json({
       success: true,
       message: 'verified, now you are regestred as a manager',
@@ -207,5 +207,20 @@ export const resetPwd = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json();
+  }
+};
+export const employeeUpdate = async (req, res) => {
+  try {
+    await Managers.findById(req.params._id).update({ ...req.body });
+    res.status(201).json({
+      success: true,
+      message: 'manager Data updated ',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'failed to update',
+      error,
+    });
   }
 };

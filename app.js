@@ -34,7 +34,6 @@ app.use(cors());
 
 app.use('/employees', employeesRouter);
 app.use('/managers', managersRouter);
-
 app.use((req, res, next) => {
   const error = new Error('Not found ');
   error.status = 404;
