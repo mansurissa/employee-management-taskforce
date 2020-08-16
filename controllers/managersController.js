@@ -209,7 +209,7 @@ export const resetPwd = async (req, res) => {
     res.status(400).json();
   }
 };
-export const employeeUpdate = async (req, res) => {
+export const managerUpdate = async (req, res) => {
   try {
     await Managers.findById(req.params._id).update({ ...req.body });
     res.status(201).json({

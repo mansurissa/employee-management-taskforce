@@ -13,6 +13,7 @@ import {
   employeeSearch,
   saveEmployees,
   employeeImage,
+  getOneEmployee,
 } from '../controllers/employeeController';
 import { readExcel, uploadExcel } from '../helpers/excel';
 
@@ -22,8 +23,9 @@ employeesRouter
   .route('/')
   .post(auth, fileUploader, employeePost)
   .get(employeesGet);
+employeesRouter.route('/:_id').get(auth, getOneEmployee);
 employeesRouter
-  .route('/many')
+  .route('/excel')
   .post(auth, uploadExcel, readExcel, saveEmployees);
 employeesRouter
   .route('/:_id')

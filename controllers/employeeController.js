@@ -82,6 +82,18 @@ export const employeeDelete = async (req, res) => {
     });
   }
 };
+export const getOneEmployee = async (req, res) => {
+  try {
+    const found = await Employees.findById(req.params._id);
+    res.status(200).json({
+      success: true,
+      message: 'fetched succefully',
+      data: found,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const employeeUpdate = async (req, res) => {
   try {
@@ -170,7 +182,6 @@ export const saveEmployees = async (req, res) => {
         position: data.position,
         birth: data.birth,
         nId: data.nId,
-        // image: req.image,
       });
       return received;
     });
