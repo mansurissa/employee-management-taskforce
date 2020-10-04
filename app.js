@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import express, { json } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
@@ -10,9 +11,9 @@ import employeesRouter from './router/employeeRouter';
 
 dotenv.config();
 
-const mongoDb = process.env.MONGO_URL;
+const { MONGO_URL, MONGO_URL_TEST, NODE_ENV } = process.env;
 mongoose
-  .connect(mongoDb, {
+  .connect(NODE_ENV === 'test' ? MONGO_URL_TEST : MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -48,3 +49,5 @@ app.use((error, req, res) => {
 
 const port = process.env.PORT;
 app.listen(port || 4002, console.log(`listening on ${port}`));
+
+export default app;

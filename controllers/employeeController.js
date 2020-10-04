@@ -37,7 +37,6 @@ export const employeePost = async (req, res) => {
       data: employee,
     });
   } catch (err) {
-    console.log('failed to write employee', err);
     return res.status(err.statusCode || 500).json({
       success: false,
       error: err.message,
@@ -69,15 +68,22 @@ export const employeesGet = async (req, res) => {
 
 export const employeeDelete = async (req, res) => {
   try {
-    const del = await Employees.findById(req.params._id).delete();
-    res.status(201).json({
+    const del = await Employees.findOne({ _id: req.params._id });
+    if (!del)
+      return res.status(404).json({
+        success: false,
+        message: 'employee not fount',
+        data: {},
+      });
+    await del.deleteOne();
+    return res.status(200).json({
       success: true,
       message: 'User deleted successfully',
       data: del,
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'failed to delete a user',
     });
   }
@@ -97,14 +103,23 @@ export const getOneEmployee = async (req, res) => {
 
 export const employeeUpdate = async (req, res) => {
   try {
-    await Employees.findById(req.params._id).update({ ...req.body });
+    const employeeUpdated = await Employees.findOneAndUpdate(
+      { _id: req.params._id },
+      req.body,
+      { new: true, runValidators: true }
+    );
     res.status(201).json({
-      message: 'Employee info updated ',
+      success: true,
+      message: 'user info updated',
+      data: {
+        employee: employeeUpdated,
+      },
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
       message: 'update failed',
+
       error,
     });
   }
@@ -115,11 +130,13 @@ export const employeeActivate = async (req, res) => {
   try {
     await Employees.findOneAndUpdate({ _id: id }, { status: req.body.status });
     res.status(200).json({
+      success: true,
       message: 'activated successfully',
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
+      success: false,
       message: 'activation failed',
       error,
     });
@@ -134,11 +151,13 @@ export const employeeSuspend = async (req, res) => {
     );
     if (req.body.suspended === true) {
       res.status(201).json({
+        success: true,
         message: ' employee suspended',
       });
     } else if (req.body.suspended === false) {
-      res.status(201).json({
-        message: ' employee is back',
+      res.status(500).json({
+        success: false,
+        message: 'employee is back',
       });
     }
   } catch (error) {

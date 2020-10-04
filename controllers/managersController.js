@@ -83,7 +83,7 @@ export const managersGet = async (req, res) => {
     res.status(200).json({
       success: true,
       got: `${manager.length} regestered managers`,
-      message: 'successfully get managers',
+      message: 'successfully got managers',
       manager,
     });
   } catch (err) {
