@@ -35,7 +35,7 @@
     "dotenv": "^8.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-fileupload": "^1.1.9",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
